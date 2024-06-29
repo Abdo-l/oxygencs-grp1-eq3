@@ -1,21 +1,36 @@
-from signalrcore.hub_connection_builder import HubConnectionBuilder
+import os
 import logging
-import requests
 import json
 import time
 
+import psycopg2
+from signalrcore.hub_connection_builder import HubConnectionBuilder
+import requests
+
 
 class App:
-    def __init__(self):
-        self._hub_connection = None
-        self.TICKS = 10
 
-        # To be configured by your team
-        self.HOST = None  # Setup your host here
-        self.TOKEN = None  # Setup your token here
-        self.T_MAX = None  # Setup your max temperature here
-        self.T_MIN = None  # Setup your min temperature here
-        self.DATABASE_URL = None  # Setup your database here
+    def __init__(self):
+
+        self._hub_connection = None
+        self.ticks = 10
+
+        # À configurer par votre équipe
+        self.host = os.getenv("HOST")  # Configurez votre hôte ici
+        self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
+        self.t_max = os.getenv("T_MAX")  # Configurez votre température maximale ici
+        self.t_min = os.getenv("T_MIN")  # Configurez votre température minimale ici
+
+        try:
+            self.connection = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                port=os.getenv("DB_PORT"),
+            )
+        except psycopg2.Error as e:
+            print("Erreur de connexion à la base de données : ", e)
 
     def __del__(self):
         if self._hub_connection != None:
