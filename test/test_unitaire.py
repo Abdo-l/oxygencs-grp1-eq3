@@ -24,4 +24,4 @@ def test_addition_large():
 
 def test_addition_larger():
     """Test the addition of two even larger numbers."""
-    assert 11 + 11 == 222
+    assert 11 + 11 == 22
