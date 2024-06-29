@@ -1,10 +1,11 @@
 import os
-import psycopg2
-from signalrcore.hub_connection_builder import HubConnectionBuilder
 import logging
-import requests
 import json
 import time
+
+import psycopg2
+from signalrcore.hub_connection_builder import HubConnectionBuilder
+import requests
 
 
 class App:
