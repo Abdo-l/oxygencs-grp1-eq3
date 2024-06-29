@@ -1,0 +1,13 @@
+**Description**
+Décrivez les changements que vous avez apportés.
+
+**Types de changements**
+Cochez les cases correspondantes :
+- [ ] Bug fix
+- [ ] New feature 
+
+**Liste de contrôle**
+- [ ] J'ai ajouté des tests pour couvrir mes changements.
+- [ ] J'ai mis à jour la documentation en conséquence.
+- [ ] Mon changement nécessite une modification de la documentation.
+- [ ] Tous les nouveaux tests et les tests existants sont réussis.
