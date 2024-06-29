@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 requests = "*"
 signalrcore = "*"
+pylint = "*"
+black = "*"
+pytest = "*"
 
 [dev-packages]
 

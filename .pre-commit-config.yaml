@@ -1,1 +1,40 @@
 ## To implement
+# pipenv install pylint black pytest --dev
+# pip install pre-commit
+# pre-commit autoupdate
+# pre-commit run --all-files
+
+repos:
+
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: 'v3.0.0a5'  # Utilise la dernière révision
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pipenv run pylint src
+        language: system
+        types: [python]
+        pass_filenames: false
+        return_codes: [0, 1]  # Pylint retourne 0 pour succès, 1 pour avertissements, 2+ pour erreurs
+
+  - repo: https://github.com/psf/black
+    rev: '24.4.2'  # Utilise la dernière révision
+    hooks:
+      - id: black
+        name: black
+        entry: pipenv run black src test
+        language: system
+        types: [python]
+        pass_filenames: false
+
+  - repo: local
+  
+    hooks:
+      - id: pytest
+        name: pytest
+        entry: pipenv run python -m pytest test/test_unitaire.py
+        language: system
+        types: [python]
+        pass_filenames: false
+
+exclude: '^$'  # Inclure tous les fichiers
