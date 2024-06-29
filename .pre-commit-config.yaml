@@ -7,7 +7,7 @@
 repos:
 
   - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: 'v3.0.0a5'  # Utilise la dernière révision
+    rev: 'v3.0.0a5' 
     hooks:
       - id: pylint
         name: pylint
@@ -15,10 +15,10 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
-        return_codes: [0, 1]  # Pylint retourne 0 pour succès, 1 pour avertissements, 2+ pour erreurs
+        return_codes: [0, 1] 
 
   - repo: https://github.com/psf/black
-    rev: '24.4.2'  # Utilise la dernière révision
+    rev: '24.4.2'  
     hooks:
       - id: black
         name: black
@@ -28,7 +28,6 @@ repos:
         pass_filenames: false
 
   - repo: local
-  
     hooks:
       - id: pytest
         name: pytest
@@ -37,4 +36,4 @@ repos:
         types: [python]
         pass_filenames: false
 
-exclude: '^$'  # Inclure tous les fichiers
+exclude: '^$' 
