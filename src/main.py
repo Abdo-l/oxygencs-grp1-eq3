@@ -1,3 +1,5 @@
+import os
+import psycopg2
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import logging
 import requests
@@ -6,16 +8,28 @@ import time
 
 
 class App:
+
     def __init__(self):
+
         self._hub_connection = None
         self.TICKS = 10
 
-        # To be configured by your team
-        self.HOST = None  # Setup your host here
-        self.TOKEN = None  # Setup your token here
-        self.T_MAX = None  # Setup your max temperature here
-        self.T_MIN = None  # Setup your min temperature here
-        self.DATABASE_URL = None  # Setup your database here
+        # À configurer par votre équipe
+        self.HOST = os.getenv("HOST")  # Configurez votre hôte ici
+        self.TOKEN = os.getenv("TOKEN")  # Configurez votre jeton ici
+        self.T_MAX = os.getenv("T_MAX")  # Configurez votre température maximale ici
+        self.T_MIN = os.getenv("T_MIN")  # Configurez votre température minimale ici
+
+        try:
+            self.connection = psycopg2.connect(
+                host=os.getenv("DB_HOST"),
+                database=os.getenv("DB_NAME"),
+                user=os.getenv("DB_USER"),
+                password=os.getenv("DB_PASSWORD"),
+                port=os.getenv("DB_PORT"),
+            )
+        except psycopg2.Error as e:
+            print("Erreur de connexion à la base de données : ", e)
 
     def __del__(self):
         if self._hub_connection != None:
@@ -58,9 +72,9 @@ class App:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
             timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
-            self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature)
-        except Exception as err:
+            etat = self.take_action(temperature)
+            self.save_event_to_database(timestamp, temperature, etat)
+        except Exception as err:  # pylint: disable=broad-except
             print(err)
 
     def take_action(self, temperature):
@@ -76,14 +90,20 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature):
+    def save_event_to_database(self, timestamp, temperature, etat):
         """Save sensor data into database."""
         try:
-            # To implement
-            pass
-        except requests.exceptions.RequestException as e:
-            # To implement
-            pass
+            cur = self.connection.cursor()
+            cur.execute(
+                "INSERT INTO sensor (temperature, heure, etat)"
+                + "VALUES (%s, %s, %s) ON CONFLICT (id) DO NOTHING",
+                (temperature, timestamp, etat),
+            )
+            self.connection.commit()
+            cur.close()
+        except psycopg2.Error as e:
+            print("Erreur lors de l'enregistrement dans la base de données : ", e)
+
 
 
 if __name__ == "__main__":

@@ -16,6 +16,8 @@ This application uses `pipenv`, a tool that aims to bring the best of all packag
 Install the project's dependencies :
 
 ```bash
+pip install pipenv
+pipenv --python C:\Users\<VotreNom>\AppData\Local\Programs\Python\Python38\python.exe
 pipenv install
 ```
 

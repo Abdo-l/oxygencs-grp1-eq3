@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 signalrcore = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
