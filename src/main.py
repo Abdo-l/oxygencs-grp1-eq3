@@ -13,13 +13,13 @@ class App:
     def __init__(self):
 
         self._hub_connection = None
-        self.ticks = 10
+        self.TICKS = 10
 
         # À configurer par votre équipe
-        self.host = os.getenv("HOST")  # Configurez votre hôte ici
-        self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
-        self.t_max = os.getenv("T_MAX")  # Configurez votre température maximale ici
-        self.t_min = os.getenv("T_MIN")  # Configurez votre température minimale ici
+        self.HOST = os.getenv("HOST")  # Configurez votre hôte ici
+        self.TOKEN = os.getenv("TOKEN")  # Configurez votre jeton ici
+        self.T_MAX = os.getenv("T_MAX")  # Configurez votre température maximale ici
+        self.T_MIN = os.getenv("T_MIN")  # Configurez votre température minimale ici
 
         try:
             self.connection = psycopg2.connect(
@@ -73,9 +73,9 @@ class App:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
             timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
-            self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature)
-        except Exception as err:
+            etat = self.take_action(temperature)
+            self.save_event_to_database(timestamp, temperature, etat)
+        except Exception as err:  # pylint: disable=broad-except
             print(err)
 
     def take_action(self, temperature):
@@ -91,14 +91,20 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature):
+    def save_event_to_database(self, timestamp, temperature, etat):
         """Save sensor data into database."""
         try:
-            # To implement
-            pass
-        except requests.exceptions.RequestException as e:
-            # To implement
-            pass
+            cur = self.connection.cursor()
+            cur.execute(
+                "INSERT INTO sensor (temperature, heure, etat)"
+                + "VALUES (%s, %s, %s) ON CONFLICT (id) DO NOTHING",
+                (temperature, timestamp, etat),
+            )
+            self.connection.commit()
+            cur.close()
+        except psycopg2.Error as e:
+            print("Erreur lors de l'enregistrement dans la base de données : ", e)
+
 
 
 if __name__ == "__main__":
