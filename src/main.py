@@ -112,9 +112,9 @@ class App:
         Prend des mesures HVAC en fonction de la température actuelle.
         """
         if float(temperature) >= float(self.t_max):
-            return self.send_action_to_hvac("TurnOnAc")
+            return self.send_action_to_hvac("TurnOnAc") + self.t_max
         if float(temperature) <= float(self.t_min):
-            return self.send_action_to_hvac("TurnOnHeater")
+            return self.send_action_to_hvac("TurnOnHeater") + self.t_min
         return None
 
     def send_action_to_hvac(self, action):
