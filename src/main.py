@@ -35,13 +35,13 @@ class App:
         self._hub_connection = None
         self.ticks = 10
         with open('configmap.yaml','r') as file :
-            configMap = yaml.safe_load(file)
-        tempConf = configMap['data']
+            config_map = yaml.safe_load(file)
+        temp_conf = config_map['data']
         # À configurer par votre équipe
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
         self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
-        self.t_max = os.getenv(tempConf['T_MAX'])  # Configurez votre température maximale ici
-        self.t_min = os.getenv(tempConf['T_MIN'])  # Configurez votre température minimale ici
+        self.t_max = os.getenv(temp_conf['T_MAX'])  # Configurez votre température maximale ici
+        self.t_min = os.getenv(temp_conf['T_MIN'])  # Configurez votre température minimale ici
 
         try:
             self.connection = psycopg2.connect(
