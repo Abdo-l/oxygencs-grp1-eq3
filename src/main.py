@@ -34,7 +34,7 @@ class App:
         """
         self._hub_connection = None
         self.ticks = 10
-        with open('configmap.yaml','r') as file :
+        with open('configmap.yaml','r', encoding='utf-8') as file :
             config_map = yaml.safe_load(file)
         temp_conf = config_map['data']
 
