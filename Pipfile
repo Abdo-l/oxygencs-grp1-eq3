@@ -10,6 +10,7 @@ pylint = "*"
 black = "*"
 pytest = "*"
 psycopg2-binary = "*"
+pyyaml = "*"
 
 [dev-packages]
 pytest = "*"
