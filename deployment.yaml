@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hvac-controller
+  namespace: grp01eq3-namespace
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mon-app
+  template:
+    metadata:
+      labels:
+        app: mon-app
+    spec:
+      containers:
+      - name: hvac-container
+        image: fak8/oxygencs_container:latest
+        env:
+        - name: HVAC_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: HVAC_HOST
+        - name: HVAC_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hvac-secrets
+              key: HVAC_TOKEN
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: DB_HOST
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: DB_NAME
+        - name: DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: hvac-secrets
+              key: DB_PASSWORD
+        - name: T_MAX
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: T_MAX
+        - name: T_MIN
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: T_MIN
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"

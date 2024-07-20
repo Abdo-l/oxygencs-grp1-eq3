@@ -9,7 +9,7 @@ import os
 import logging
 import json
 import time
-
+import yaml
 import psycopg2
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import requests
@@ -34,12 +34,14 @@ class App:
         """
         self._hub_connection = None
         self.ticks = 10
-
+        with open('configmap.yaml','r') as file :
+            configMap = yaml.safe_load(file)
+        tempConf = configMap['data']
         # À configurer par votre équipe
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
         self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
-        self.t_max = os.getenv("T_MAX")  # Configurez votre température maximale ici
-        self.t_min = os.getenv("T_MIN")  # Configurez votre température minimale ici
+        self.t_max = os.getenv(tempConf['T_MAX'])  # Configurez votre température maximale ici
+        self.t_min = os.getenv(tempConf['T_MIN'])  # Configurez votre température minimale ici
 
         try:
             self.connection = psycopg2.connect(
@@ -111,7 +113,7 @@ class App:
         """
         Prend des mesures HVAC en fonction de la température actuelle.
         """
-        if float(10) >= float(5):
+        if float(temperature) >= float(self.t_max):
             return self.send_action_to_hvac("TurnOnAc")
         if float(temperature) <= float(self.t_min):
             return self.send_action_to_hvac("TurnOnHeater")
