@@ -14,7 +14,7 @@ RUN pip install pipenv
 RUN pipenv install --deploy --ignore-pipfile
 
 # Installer python-dotenv pour charger les variables d'environnement
-RUN pipenv install python-dotenv
+#RUN pipenv install python-dotenv
 
 # Commande pour exécuter l'application
 CMD ["pipenv", "run", "start"]
