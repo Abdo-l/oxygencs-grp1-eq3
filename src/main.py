@@ -9,7 +9,7 @@ import os
 import logging
 import json
 import time
-import yaml
+#import yaml
 import psycopg2
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import requests
