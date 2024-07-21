@@ -8,5 +8,5 @@ data:
   DB_HOST: "157.230.69.113"
   DB_NAME: "db01eq3"
   DB_USER: "user01eq3"
-  T_MAX: "26"
+  T_MAX: "25"
   T_MIN: "20"

@@ -7,7 +7,7 @@ WORKDIR /app
 # Copier les fichiers nécessaires dans le conteneur
 COPY Pipfile Pipfile.lock /app/
 COPY src /app/src
-COPY .env /app/.env
+#COPY .env /app/.env
 COPY configmap.yaml /app/configmap.yaml
 # Installer les dépendances en utilisant Pipenv
 RUN pip install pipenv
