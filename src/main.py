@@ -41,9 +41,9 @@ class App:
         # À configurer par votre équipe
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
         self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
-        self.t_max = temp_conf['T_MAX']  # Configurez votre température maximale ici
-        self.t_min = temp_conf['T_MIN']  # Configurez votre température minimale ici
-
+        self.t_max = os.getenv('T_MAX')  # Configurez votre température maximale ici
+        self.t_min = os.getenv('T_MIN')   # Configurez votre température minimale ici
+        print('t_max '+self.t_max)
         try:
             self.connection = psycopg2.connect(
                 host=os.getenv("DB_HOST"),
