@@ -42,6 +42,11 @@ spec:
             configMapKeyRef:
               name: hvac-config
               key: DB_USER
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: hvac-config
+              key: DB_PORT
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:

@@ -7,6 +7,7 @@ data:
   HVAC_HOST: "http://159.203.50.162"
   DB_HOST: "157.230.69.113"
   DB_NAME: "db01eq3"
+  DB_PORT: "5432"
   DB_USER: "user01eq3"
   T_MAX: "25"
   T_MIN: "20"
