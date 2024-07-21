@@ -117,7 +117,7 @@ class App:
         if float(temperature) >= float(self.t_max):
             return self.send_action_to_hvac("TurnOnAc")
         if float(temperature) <= float(self.t_min):
-            return self.send_action_to_hvac("TurnOnHeater") + self.t_min
+            return self.send_action_to_hvac("TurnOnHeater")
         return None
 
     def send_action_to_hvac(self, action):
