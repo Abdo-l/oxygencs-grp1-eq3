@@ -36,7 +36,7 @@ class App:
         self.ticks = 10
         with open('configmap.yaml','r', encoding='utf-8') as file :
             config_map = yaml.safe_load(file)
-        temp_conf = config_map['data']
+        #temp_conf = config_map['data']
 
         # À configurer par votre équipe
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
