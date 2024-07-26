@@ -9,7 +9,7 @@ import os
 import logging
 import json
 import time
-#import yaml
+import yaml
 import psycopg2
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import requests
@@ -34,16 +34,16 @@ class App:
         """
         self._hub_connection = None
         self.ticks = 10
-        #with open('configmap.yaml','r', encoding='utf-8') as file :
-        #    config_map = yaml.safe_load(file)
-        #temp_conf = config_map['data']
+        with open('configmap.yaml','r', encoding='utf-8') as file :
+            config_map = yaml.safe_load(file)
+        temp_conf = config_map['data']
 
         # À configurer par votre équipe
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
         self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
-        self.t_max = os.getenv('T_MAX')  # Configurez votre température maximale ici
-        self.t_min = os.getenv('T_MIN')   # Configurez votre température minimale ici
-        print('t_max '+self.t_max)
+        self.t_max = temp_conf['T_MAX']  # Configurez votre température maximale ici
+        self.t_min = temp_conf['T_MIN']  # Configurez votre température minimale ici
+
         try:
             self.connection = psycopg2.connect(
                 host=os.getenv("DB_HOST"),
