@@ -52,6 +52,7 @@ jobs:
       - name: Deploy to Kubernetes
         if: github.ref == 'refs/heads/main'
         run: |
+          mkdir -p $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
           kubectl set image deployment/hvac-controller hvac-container=${{ secrets.DOCKERHUB_USERNAME }}/oxygencs_container:latest --namespace=grp01eq3-namespace
         env:
