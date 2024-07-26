@@ -48,20 +48,23 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  
+      
       - name: Create .kube directory
         run: mkdir -p $HOME/.kube
-        
-      - name: Decode kubeconfig with Python
+  
+      - name: Write and execute Python script to decode kubeconfig
         run: |
-          python -c "import base64; import os; data = os.getenv('KUBE_CONFIG_DATA'); with open('$HOME/.kube/config', 'wb') as f: f.write(base64.b64decode(data))"
+            echo 'import base64
+            import os
+            
+            data = os.getenv("KUBE_CONFIG_DATA")
+            with open("/home/runner/.kube/config", "wb") as f:
+            f.write(base64.b64decode(data))' > decode_kubeconfig.py
+            python decode_kubeconfig.py
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        
+
       - name: Deploy to Kubernetes
         if: github.ref == 'refs/heads/main'
         run: |
           kubectl set image deployment/hvac-controller hvac-container=${{ secrets.DOCKERHUB_USERNAME }}/oxygencs_container:latest --namespace=grp01eq3-namespace
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-      
