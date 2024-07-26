@@ -59,8 +59,8 @@ jobs:
             
             data = os.getenv("KUBE_CONFIG_DATA")
             with open("/home/runner/.kube/config", "wb") as f:
-            f.write(base64.b64decode(data))' > decode_kubeconfig.py
-            python decode_kubeconfig.py
+              f.write(base64.b64decode(data))' > decode_kubeconfig.py
+              python decode_kubeconfig.py
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
 
