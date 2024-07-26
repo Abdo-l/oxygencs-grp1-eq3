@@ -49,22 +49,20 @@ jobs:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       
-      - name: Create .kube directory
-        run: mkdir -p $HOME/.kube
-  
-      - name: Write and execute Python script to decode kubeconfig
-        run: |
-            echo 'import base64
-            import os
-            
-            data = os.getenv("KUBE_CONFIG_DATA")
-            with open("/home/runner/.kube/config", "wb") as f:
-              f.write(base64.b64decode(data))' > decode_kubeconfig.py
-              python decode_kubeconfig.py
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
 
-      - name: Deploy to Kubernetes
-        if: github.ref == 'refs/heads/main'
-        run: |
-          kubectl set image deployment/hvac-controller hvac-container=${{ secrets.DOCKERHUB_USERNAME }}/oxygencs_container:latest --namespace=grp01eq3-namespace
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: actions-hub/kubectl@master
+      with:
+        kubectl-version: 'latest'
+        kubeconfig: ${{ secrets.KUBECONFIG }}
+
+    - name: Update Kubernetes deployment
+      run: |
+        kubectl set image deployment/hvac-controller hvac-controller=fak8/oxygencs_container:latest -n grp01eq3-namespace
