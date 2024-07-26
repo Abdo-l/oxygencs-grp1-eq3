@@ -61,7 +61,7 @@ jobs:
       uses: actions-hub/kubectl@master
       with:
         kubectl-version: 'latest'
-        kubeconfig: ${{ secrets.KUBECONFIG }}
+        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
 
     - name: Update Kubernetes deployment
       run: |
