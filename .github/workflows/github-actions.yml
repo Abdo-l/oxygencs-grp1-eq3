@@ -58,11 +58,13 @@ jobs:
       uses: azure/setup-kubectl@v1
       with:
         version: 'v1.21.0'
-
+    - name: Create .kube directory
+      run: |
+        mkdir -p $HOME/.kube
     - name: Set up Kubeconfig
       run: |
         echo "${{ secrets.KUBE_CONFIG_DATA }}" > $HOME/.kube/config
 
     - name: Deploy HVAC to Kubernetes
       run: |
-        kubectl set image deployment/hvac-controller hvac-container=your-dockerhub-username/hvac:latest -n grp01eq3-namespace
+        kubectl set image deployment/hvac-controller hvac-container=${{ secrets.DOCKERHUB_USERNAME }}/oxygencs_container:latest -n grp01eq3-namespace
