@@ -4,7 +4,7 @@ metadata:
   name: hvac-controller
   namespace: grp01eq3-namespace
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: mon-app
