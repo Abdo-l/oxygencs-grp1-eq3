@@ -11,9 +11,9 @@ import json
 import time
 import yaml
 import psycopg2
+from psycopg2 import pool
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import requests
-
 
 class App:
     """
