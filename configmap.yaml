@@ -10,4 +10,4 @@ data:
   DB_PORT: "5432"
   DB_USER: "user01eq3"
   T_MAX: "50"
-  T_MIN: "40"
+  T_MIN: "45"
