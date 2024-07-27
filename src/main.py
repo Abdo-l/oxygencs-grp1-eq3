@@ -24,17 +24,17 @@ class App:
         token (str): Jeton pour l'authentification.
         t_max (str): Température maximale configurée.
         t_min (str): Température minimale configurée.
-        connection: Connexion à la base de données PostgreSQL.
+        connection_pool: Pool de connexions à la base de données PostgreSQL.
         _hub_connection: Connexion au hub de capteurs.
     """
 
     def __init__(self):
         """
-        Initialise l'application avec la configuration et la connexion à la base de données.
+        Initialise l'application avec la configuration et le pool de connexions à la base de données.
         """
         self._hub_connection = None
         self.ticks = 10
-        with open('configmap.yaml','r', encoding='utf-8') as file :
+        with open('configmap.yaml', 'r', encoding='utf-8') as file:
             config_map = yaml.safe_load(file)
         temp_conf = config_map['data']
 
@@ -45,22 +45,27 @@ class App:
         self.t_min = temp_conf['T_MIN']  # Configurez votre température minimale ici
 
         try:
-            self.connection = psycopg2.connect(
+            # Créez un pool de connexions pour éviter une surcharge de connexions
+            self.connection_pool = psycopg2.pool.SimpleConnectionPool(
+                1,  # Minconn
+                10, # Maxconn
                 host=os.getenv("DB_HOST"),
                 database=os.getenv("DB_NAME"),
                 user=os.getenv("DB_USER"),
                 password=os.getenv("DB_PASSWORD"),
-                port=os.getenv("DB_PORT"),
+                port=os.getenv("DB_PORT")
             )
         except psycopg2.Error as e:
-            print("Erreur de connexion à la base de données : ", e)
+            print("Erreur de connexion au pool de bases de données : ", e)
 
     def __del__(self):
         """
-        Arrête la connexion au hub lorsque l'application est supprimée.
+        Arrête la connexion au hub et ferme le pool de connexions lorsque l'application est supprimée.
         """
         if self._hub_connection is not None:
             self._hub_connection.stop()
+        if self.connection_pool is not None:
+            self.connection_pool.closeall()
 
     def start(self):
         """
@@ -140,17 +145,20 @@ class App:
         Enregistre les données de capteurs dans la base de données.
         """
         try:
-            cur = self.connection.cursor()
+            connection = self.connection_pool.getconn()
+            cur = connection.cursor()
             cur.execute(
                 "INSERT INTO sensor (temperature, heure, etat)"
                 + "VALUES (%s, %s, %s) ON CONFLICT (id) DO NOTHING",
                 (temperature, timestamp, etat),
             )
-            self.connection.commit()
+            connection.commit()
             cur.close()
+            self.connection_pool.putconn(connection)
         except psycopg2.Error as e:
             print("Erreur lors de l'enregistrement dans la base de données : ", e)
-
+            if connection:
+                self.connection_pool.putconn(connection, close=True)
 
 if __name__ == "__main__":
     app = App()
