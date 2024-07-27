@@ -11,6 +11,7 @@ import json
 import time
 import yaml
 import psycopg2
+# pylint: disable=W0611
 from psycopg2 import pool
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 import requests
@@ -30,7 +31,8 @@ class App:
 
     def __init__(self):
         """
-        Initialise l'application avec la configuration et le pool de connexions à la base de données.
+        Initialise l'application avec la configuration et le
+        pool de connexions à la base de données.
         """
         self._hub_connection = None
         self.ticks = 10
@@ -60,7 +62,8 @@ class App:
 
     def __del__(self):
         """
-        Arrête la connexion au hub et ferme le pool de connexions lorsque l'application est supprimée.
+        Arrête la connexion au hub et ferme le pool de connexions 
+        lorsque l'application est supprimée.
         """
         if self._hub_connection is not None:
             self._hub_connection.stop()
