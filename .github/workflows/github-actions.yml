@@ -54,15 +54,15 @@ jobs:
     needs: build
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Set up kubectl
-      uses: actions-hub/kubectl@master
+      uses: azure/setup-kubectl@v1
       with:
-        kubectl-version: 'latest'
-        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: 'v1.21.0'
 
-    - name: Update Kubernetes deployment
+    - name: Set up Kubeconfig
       run: |
-        kubectl set image deployment/hvac-controller hvac-controller=fak8/oxygencs_container:latest -n grp01eq3-namespace
+        echo "${{ secrets.KUBE_CONFIG_DATA }}" > $HOME/.kube/config
+
+    - name: Deploy HVAC to Kubernetes
+      run: |
+        kubectl set image deployment/hvac-controller hvac-container=your-dockerhub-username/hvac:latest -n grp01eq3-namespace
