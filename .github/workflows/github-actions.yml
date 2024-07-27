@@ -64,7 +64,9 @@ jobs:
     - name: Set up Kubeconfig
       run: |
         echo "${{ secrets.KUBE_CONFIG_DATA }}" > $HOME/.kube/config
-
     - name: Deploy HVAC to Kubernetes
       run: |
         kubectl set image deployment/hvac-controller hvac-container=${{ secrets.DOCKERHUB_USERNAME }}/oxygencs_container:latest -n grp01eq3-namespace
+    - name: Restart HVAC deployment
+      run: |
+        kubectl rollout restart deployment/hvac-controller -n grp01eq3-namespace
