@@ -63,9 +63,10 @@ spec:
               name: hvac-config
               key: T_MIN
         resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
           limits:
-            memory: "512Mi"
-            cpu: "500m"
+            cpu: "250m"
+            memory: "64Mi"
+          requests:
+            cpu: "125m"
+            memory: "32Mi"
+
