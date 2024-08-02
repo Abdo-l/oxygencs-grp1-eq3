@@ -9,5 +9,5 @@ data:
   DB_NAME: "db01eq3"
   DB_PORT: "5432"
   DB_USER: "user01eq3"
-  T_MAX: "35"
-  T_MIN: "25"
+  T_MAX: "23"
+  T_MIN: "20"
