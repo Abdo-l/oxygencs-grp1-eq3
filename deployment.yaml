@@ -64,9 +64,8 @@ spec:
               key: T_MIN
         resources:
           limits:
-            cpu: "200m"
-            memory: "128Mi"
-          requests:
-            cpu: "100m"
+            cpu: "250m"
             memory: "64Mi"
-
+          requests:
+            cpu: "125m"
+            memory: "32Mi"
