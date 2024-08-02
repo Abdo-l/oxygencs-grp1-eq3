@@ -44,7 +44,7 @@ class App:
         self.host = os.getenv("HOST")  # Configurez votre hôte ici
         self.token = os.getenv("TOKEN")  # Configurez votre jeton ici
         self.t_max = 33  # Configurez votre température maximale ici
-        self.t_min = 23 # Configurez votre température minimale ici
+        self.t_min = temp_conf['T_MIN']  # Configurez votre température minimale ici
 
         try:
             # Créez un pool de connexions pour éviter une surcharge de connexions
